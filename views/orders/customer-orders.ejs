@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <title>The Banana Leaf | Orders</title>
+</head>
+
+<body>
+    <%- include('../partials/header') %>
+
+        <main class="min-h-screen">
+            <div class="container py-5">
+                <h1 class="text-4xl font-semibold mt-16 mb-4">Active Orders</h1>
+
+                <% if (orders.length) { %>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span>Order No.</span>
+                                </th>
+                                <th>
+                                    <span>Dish</span>
+                                </th>
+                                <th>
+                                    <span>Approved</span>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <% orders.forEach(function(order) { %>
+                                <tr>
+                                    <td>
+                                        <%= order.order_number %>
+                                    </td>
+                                    <td>
+                                        <%= order.dish %>
+                                    </td>
+                                    <td>
+                                        <% if (order.confirmed) { %>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            <% } else { %>
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                                <% } %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                    <% } else { %>
+                        <div class="mt-12">
+                            <h2 class="text-2xl">No orders found. Ensure that your email address and order number are
+                                correct.</h2>
+                        </div>
+                        <% } %>
+            </div>
+        </main>
+
+        <%- include('../partials/footer') %>
+
+</body>
+
+</html>

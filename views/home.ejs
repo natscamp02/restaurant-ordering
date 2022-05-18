@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <title>The Banana Leaf</title>
+</head>
+
+<body>
+    <%- include('partials/header') %>
+
+        <main class="min-h-screen">
+            <section class="min-w-full h-screen relative">
+                <div class="text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    <h1 class="text-5xl font-bold mb-3">The Banana Leaf</h1>
+                    <h2 class="text-lg mb-4">All Natural, All Jamaican</h2>
+
+                    <a href="/menu" class="inline-block p-4 rounded text-white bg-green-500">Browse Our Dishes</a>
+                </div>
+            </section>
+        </main>
+
+        <%- include('partials/footer') %>
+
+</body>
+
+</html>

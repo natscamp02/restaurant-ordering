@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <title>The Banana Leaf | Edit Order</title>
+</head>
+
+<body>
+    <%- include('../partials/header') %>
+
+        <main class="min-h-screen">
+            <div class="container py-5">
+                <h1 class="text-4xl font-semibold mt-16 mb-8">Edit Current Order</h1>
+
+                <form action="/orders/update/<%= order.id %>" method="post">
+
+                    <div class="my-4 mb-6 grid gap-1">
+                        <label for="dish_id">Dish</label>
+                        <select class="form-select w-max" name="dish_id" id="dish_id" required>
+                            <% dishes.forEach(function(d) { %>
+                                <option value="<%= d.id %>" selected="<%= order.dish_id === d.id %>">
+                                    <%= d.dish %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary" type="submit">Save</button>
+                </form>
+            </div>
+        </main>
+
+        <%- include('../partials/footer') %>
+
+</body>
+
+</html>
