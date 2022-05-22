@@ -14,13 +14,17 @@
 <body>
     <%- include('partials/header') %>
 
-        <main class="min-h-screen">
+        <main
+            class="min-h-screen bg-[url('https://images.unsplash.com/photo-1651865046851-308a59a2727e?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870')] bg-cover bg-no-repeat">
             <section class="min-w-full h-screen relative">
-                <div class="text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                    <h1 class="text-5xl font-bold mb-3">The Banana Leaf</h1>
-                    <h2 class="text-lg mb-4">All Natural, All Jamaican</h2>
+                <div
+                    class="bg-white py-4 px-6 rounded text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    <h1 class="text-5xl font-bold mb-6 uppercase">The Banana Leaf</h1>
+                    <h2 class="text-xl mb-6">All Natural, All Jamaican</h2>
 
-                    <a href="/menu" class="inline-block p-4 rounded text-white bg-green-500">Browse Our Dishes</a>
+                    <a href="/menu"
+                        class="inline-block p-4 rounded text-white bg-green-500 transition hover:bg-green-400">Browse
+                        Our Dishes</a>
                 </div>
             </section>
         </main>

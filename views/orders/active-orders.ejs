@@ -15,26 +15,26 @@
     <%- include('../partials/header') %>
 
         <main class="min-h-screen">
-            <div class="container py-5">
-                <h1 class="text-4xl font-semibold mt-16 mb-4">Active Orders</h1>
+            <div class="container py-5 text-center">
+                <h1 class="text-4xl font-semibold mt-16 mb-8">Active Orders</h1>
 
                 <% if (orders.length) { %>
-                    <table>
-                        <thead>
+                    <table class="mx-auto">
+                        <thead class="bg-black text-white">
                             <tr>
-                                <th>
+                                <th class="p-4">
                                     <span>Order No.</span>
                                 </th>
-                                <th>
+                                <th class="p-4">
                                     <span>Dish</span>
                                 </th>
-                                <th>
+                                <th class="p-4">
                                     <span>Customer's Email</span>
                                 </th>
-                                <th>
+                                <th class="p-4">
                                     <span>Approved</span>
                                 </th>
-                                <th>
+                                <th class="p-4">
                                     <span>Actions</span>
                                 </th>
                             </tr>
@@ -43,24 +43,26 @@
                         <tbody>
                             <% orders.forEach(function(order) { %>
                                 <tr>
-                                    <td>
+                                    <td class="p-4 border-b">
                                         <%= order.order_number %>
                                     </td>
-                                    <td>
+                                    <td class="p-4 border-b">
                                         <%= order.dish %>
                                     </td>
-                                    <td>
-                                        <%= order.user_email %>
+                                    <td class="p-4 border-b">
+                                        <%= order.email_address %>
                                     </td>
-                                    <td>
+                                    <td class="p-4 border-b">
                                         <% if (order.confirmed) { %>
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                class="h-6 w-6 inline-block text-green-500" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M5 13l4 4L19 7" />
                                             </svg>
                                             <% } else { %>
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    class="h-6 w-6 inline-block text-red-500" fill="none"
                                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         d="M6 18L18 6M6 6l12 12" />
@@ -68,12 +70,17 @@
                                                 <% } %>
                                     </td>
 
-                                    <td>
-                                        <a href="/orders/approve/<%= order.id %>" class="btn bg-green-100">Approve</a>
+                                    <td class="p-4 border-b">
+                                        <% if (!order.confirmed) { %>
+                                            <a href="/orders/approve/<%= order.id %>" class="btn bg-green-200">
+                                                Approve
+                                            </a>
+                                            <% } %>
 
-                                        <a href="/orders/edit/<%= order.id %>" class="btn bg-red-100">Edit</a>
+                                                <a href="/orders/edit/<%= order.id %>" class="btn bg-blue-200">Edit</a>
 
-                                        <a href="/orders/delete/<%= order.id %>" class="btn bg-red-100">Delete</a>
+                                                <a href="/orders/delete/<%= order.id %>"
+                                                    class="btn bg-red-200">Delete</a>
                                     </td>
                                 </tr>
                                 <% }) %>

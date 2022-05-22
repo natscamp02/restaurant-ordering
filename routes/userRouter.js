@@ -19,8 +19,11 @@ router.get('/login', (req, res) => {
 router.post('/login', (req, res, next) => {
 	const data = restrictFields(req.body, 'username', 'password');
 
-	conn.query('SELECT * FROM users WHERE username = ? AND password = ?', Object.values(data), (err, [user]) => {
-		if (err || !user) return next(createError(402, 'Incorrect username or password'));
+	conn.query('SELECT * FROM users WHERE username = ? AND BINARY password = ?', Object.values(data), (err, [user]) => {
+		if (err || !user) {
+			if (err) console.log(err);
+			return res.redirect('/users/login');
+		}
 
 		req.session.user = user;
 		res.redirect('/orders');

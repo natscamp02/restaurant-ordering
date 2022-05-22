@@ -18,17 +18,27 @@
             <div class="container py-5">
                 <h1 class="text-4xl font-semibold mt-16 mb-8">Edit Current Order</h1>
 
-                <form action="/orders/update/<%= order.id %>" method="post">
+                <form action="/orders/update" method="post">
+
+                    <input type="hidden" name="order_id" id="order_id" value="<%= order.id %>">
 
                     <div class="my-4 mb-6 grid gap-1">
                         <label for="dish_id">Dish</label>
                         <select class="form-select w-max" name="dish_id" id="dish_id" required>
                             <% dishes.forEach(function(d) { %>
-                                <option value="<%= d.id %>" selected="<%= order.dish_id === d.id %>">
+                                <option value="<%= d.id %>" <%=order.dish_id===d.id ? 'selected' : '' %>>
                                     <%= d.dish %>
                                 </option>
                                 <% }) %>
                         </select>
+                    </div>
+
+                    <div class="my-4 mb-6">
+                        <label for="confirmed" class="inline-flex gap-2 items-center">
+                            <input class="form-check" type="checkbox" name="confirmed" id="confirmed" <%=order.confirmed
+                                ? 'checked' : '' %>>
+                            <span>Order Confirmed</span>
+                        </label>
                     </div>
 
                     <button class="btn btn-primary" type="submit">Save</button>

@@ -44,8 +44,6 @@ router.post('/find', (req, res) => {
 		(err, orders) => {
 			if (err) return res.redirect('/orders/find');
 
-			console.log(orders);
-
 			res.render('orders/customer-orders', { orders });
 		}
 	);
@@ -65,18 +63,18 @@ router.post('/new/:dish_id', (req, res) => {
 		conn.query('SELECT * FROM customers WHERE BINARY email_address = ?', [data.email_address], (err, customers) => {
 			if (err) throw err;
 
-			// If user is not new, use existing customer, otherwise add new customer
+			// If user already exists, use existing customer, otherwise add new customer
 			if (customers.length) createNewOrder(res, req.params.dish_id, customers[0].id, customers[0].order_code);
 			else {
 				// 2) Generate new order code for user
-				const code = Date.now().toString().slice(-6);
+				const randomCode = Date.now().toString().slice(-6);
 				conn.query(
 					'INSERT INTO customers (email_address, order_code) VALUES (?, ?)',
-					[data.email_address.trim(), code],
+					[data.email_address.trim(), randomCode],
 					(err, result) => {
 						if (err) throw err;
 
-						createNewOrder(res, req.params.dish_id, result.insertId, code);
+						createNewOrder(res, req.params.dish_id, result.insertId, randomCode);
 					}
 				);
 			}
@@ -93,21 +91,21 @@ router.post('/new/:dish_id', (req, res) => {
 router.use(protect);
 
 router.get('/', (req, res, next) => {
-	conn.query('SELECT orders.*, menu.dish FROM orders, menu WHERE orders.dish_id = menu.id', (err, results) => {
-		if (err) return next(err);
+	conn.query(
+		'SELECT orders.*, menu.dish, customers.email_address FROM orders, menu, customers WHERE orders.dish_id = menu.id AND orders.customer_id = customers.id ORDER BY orders.id',
+		(err, results) => {
+			if (err) return next(err);
 
-		console.log(results);
-		res.render('orders/active-orders', {
-			orders: results,
-		});
-	});
+			res.render('orders/active-orders', {
+				orders: results,
+			});
+		}
+	);
 });
 
 router.get('/approve/:id', (req, res, next) => {
 	conn.query('UPDATE orders SET orders.confirmed = 1 WHERE orders.id = ' + req.params.id, (err, result) => {
-		if (err) {
-			console.log(err);
-		}
+		if (err) console.log(err);
 
 		res.redirect('/orders');
 	});
@@ -115,26 +113,44 @@ router.get('/approve/:id', (req, res, next) => {
 
 router.get('/edit/:id', (req, res, next) => {
 	conn.query('SELECT * FROM orders WHERE orders.id = ' + req.params.id, (err, data) => {
-		if (err || !data.length) return res.redirect('/orders');
+		if (err || !data.length) {
+			if (err) console.log(err);
 
-		res.render('orders/edit-form', { order: data[0], dishes: [] });
+			return res.redirect('/orders');
+		}
+
+		conn.query('SELECT * FROM menu', (err, dishes) => {
+			if (err || !data.length) {
+				if (err) console.log(err);
+
+				return res.redirect('/orders');
+			}
+
+			res.render('orders/edit-form', { order: data[0], dishes });
+		});
 	});
 });
 
-router.post('/update/:id', (req, res, next) => {
-	const data = restrictFields(req.body, 'dish_id');
+router.post('/update', (req, res, next) => {
+	const data = restrictFields(req.body, 'order_id', 'dish_id', 'confirmed');
 
-	conn.query(
-		'UPDATE orders SET orders.dish_id = ' + data.dish_id + ' WHERE orders.id = ' + req.params.id,
-		(err, results) => {
-			res.redirect('/orders');
-		}
-	);
+	let sqlQuery = 'UPDATE orders SET ';
+	sqlQuery += 'dish_id = ' + data.dish_id + ', ';
+	sqlQuery += ' confirmed = ' + (data.confirmed ? '1' : '0');
+	sqlQuery += ' WHERE orders.id = ' + data.order_id;
+
+	conn.query(sqlQuery, (err, results) => {
+		if (err) console.log(err);
+
+		res.redirect('/orders');
+	});
 });
 
 // Deletes order
 router.get('/delete/:id', (req, res) => {
 	conn.query('DELETE FROM orders WHERE id = ' + req.params.id, (err, result) => {
+		if (err) console.log(err);
+
 		res.redirect('/orders');
 	});
 });
